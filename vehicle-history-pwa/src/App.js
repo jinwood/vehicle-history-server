@@ -1,8 +1,7 @@
-import React from "react";
-import UserContainer from "./components/user/userContainer";
-import UserStatus from "./components/user/userStatus";
-import * as userService from "./services/userService";
-import logo from "./logo.svg";
+import React from 'react';
+import TopMenu from './components/layout/topMenu';
+import UserStatus from './components/user/userStatus';
+import * as userService from './services/userService';
 
 class App extends React.Component {
   constructor(props) {
@@ -17,13 +16,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
-          <div class="ui borderless menu">
-            <div class="ui text container">
-              <div class="header item">
-                Vehicle History
-              </div>
-            </div>
-          </div>
+          <TopMenu />
         </header>
         <div class="ui hidden divider"></div>
         <UserStatus user={this.state.user} />

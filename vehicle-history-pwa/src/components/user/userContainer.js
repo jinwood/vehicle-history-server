@@ -10,7 +10,6 @@ class UserContainer extends React.Component {
 
   componentDidMount() {
       if(this.props.user) {
-          console.log('mounted');
           this.setState({user: this.props.user});
       }
   }
