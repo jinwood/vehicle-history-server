@@ -15,7 +15,7 @@ const bootstrap = async () => {
     //init db
     await postgresDB();
 
-    app.use(cors({origin: 'http://localhost:3000'}));
+    app.use(cors.default({origin: 'http://localhost:3000'}));
     
     app.use(bodyParser());
 

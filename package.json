@@ -11,8 +11,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/koa-router": "^7.0.40",
     "nodemon": "^1.18.11",
-    "typescript": "^3.4.4"
+    "typescript": "^3.4.5"
   },
   "dependencies": {
     "@types/koa": "^2.0.48",

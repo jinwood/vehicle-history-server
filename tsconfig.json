@@ -8,7 +8,9 @@
         "lib": ["es2017"],
         "types": ["node"],
         "sourceMap": true,
-        "baseUrl": "./src"
+        "baseUrl": "./src",
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
     },
     "exclude": [
         "node_modules",

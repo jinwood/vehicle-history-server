@@ -1,9 +1,9 @@
-import * as Router from 'koa-router';
+import Router from 'koa-router';
 import userController from 'controllers/userController';
 import vehicleController from 'controllers/vehicleController';
 import HistoryItemController from 'controllers/historyItemController';
 
-export const crudRouter = new Router();
+export const crudRouter: Router = new Router();
 
 //user
 crudRouter.get('/users', userController.getUsers);
