@@ -1,7 +1,7 @@
 import { postgresDB } from 'database/postgres-db';
 import { testRouter } from 'routes/test-routes';
 import { crudRouter } from 'routes/crud-routes';
-import * as bodyParser from 'koa-bodyparser';
+import bodyParser from 'koa-bodyparser';
 import * as cors from 'koa2-cors';
 
 var app = require('./app');

@@ -17,7 +17,6 @@ export const postgresDB = async () => {
         synchronize : true,
     }).then( async connection => {
         console.log('connection to db established');
-        await seed(connection);
     }).catch(error => console.log(`here's an error ${error}`));
 };
 
