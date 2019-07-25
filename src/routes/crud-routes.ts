@@ -12,8 +12,6 @@ crudRouter.post('/users', userController.createUser);
 crudRouter.put('/users/:id', userController.updateUser);
 crudRouter.delete('/users/:id', userController.deleteUser);
 
-crudRouter.get('/users/:id/vehicles', userController.getUserAndVehicles);
-
 //vehicle
 crudRouter.get('/vehicles', vehicleController.getVehicles);
 crudRouter.get('/vehicles/:id', vehicleController.getVehicle);

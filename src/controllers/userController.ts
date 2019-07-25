@@ -19,27 +19,7 @@ export default class UserController {
 
         const userRepository: Repository<User> = getManager().getRepository(User);
 
-        const user: User = await userRepository.findOne(ctx.params.id);
-
-        if (user) {
-            ctx.status = 200;
-            ctx.body = user;
-        } else { 
-            ctx.status = 400;
-            ctx.body = `couldnt find the user with id ${ctx.params.id}`;
-        }
-    }
-
-    public static async getUserAndVehicles (ctx: BaseContext) {
-
-        const userRepository: Repository<User> = getManager().getRepository(User);
-
-        const user: User = await userRepository.findOne({
-            relations: ['vehicles'],
-            where: {
-                id: ctx.params.id
-            }
-        });
+        const user: User = await userRepository.findOne(ctx.params.id, {relations: ['vehicles']});
 
         if (user) {
             ctx.status = 200;
