@@ -1,7 +1,8 @@
 import { BaseContext } from "koa";
-import { getManager, Repository, Not, Equal } from "typeorm";
+import { getManager, Repository, Not, Equal, getConnection } from "typeorm";
 import { validate, ValidationError } from "class-validator";
 import { User } from "models/user";
+import { Vehicle } from "models/vehicle";
 
 export default class UserController {
   public static async getUsers(ctx: BaseContext) {
@@ -16,7 +17,10 @@ export default class UserController {
   public static async getUser(ctx: BaseContext) {
     const userRepository: Repository<User> = getManager().getRepository(User);
 
-    const user: User = await userRepository.findOne(ctx.params.id);
+    const user: User = await userRepository
+      .createQueryBuilder("user")
+      .where("user.id = :id", { id: ctx.params.id })
+      .getOne();
 
     if (user) {
       ctx.status = 200;
@@ -105,6 +109,26 @@ export default class UserController {
     } else {
       await userRepository.remove(deletee);
       ctx.status = 204;
+    }
+  }
+  public static async getUserVehicles(ctx: BaseContext) {
+    console.log("in get user vehicles");
+    const userRepository: Repository<User> = getManager().getRepository(User);
+
+    const user: User = await userRepository.findOne(ctx.params.id);
+    let vehicle = await getConnection()
+      .getRepository(User)
+      .createQueryBuilder("user")
+      .where("user.id = :id", { id: ctx.params.id })
+      .leftJoinAndSelect("user.vehicles", "vehicle.id")
+      .getOne();
+
+    if (user) {
+      ctx.status = 200;
+      ctx.body = vehicle;
+    } else {
+      ctx.status = 400;
+      ctx.body = `couldnt find the user with id ${ctx.params.id}`;
     }
   }
 }
