@@ -98,6 +98,7 @@ export default class VehicleController {
     const validationErrors: ValidationError[] = await validate(newVehicle, {
       skipMissingProperties: true
     });
+
     if (validationErrors.length > 0) {
       ctx.status = 400;
       ctx.body = validationErrors;
@@ -105,9 +106,7 @@ export default class VehicleController {
       await vehicleRepository.findOne({ registration: newVehicle.registration })
     ) {
       ctx.status = 400;
-      ctx.body = `a vehicle with registration ${
-        newVehicle.registration
-      } already exists`;
+      ctx.body = `a vehicle with registration ${registration} already exists`;
     } else {
       try {
         const vehicle = vehicleRepository.save(newVehicle).then(v => {
