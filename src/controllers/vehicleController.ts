@@ -1,8 +1,8 @@
-import { BaseContext } from "koa";
-import { getManager, Repository, getConnection } from "typeorm";
-import { validate, ValidationError } from "class-validator";
-import { Vehicle } from "models/vehicle";
-import { User } from "models/user";
+import { BaseContext } from 'koa';
+import { getManager, Repository, getConnection } from 'typeorm';
+import { validate, ValidationError } from 'class-validator';
+import { Vehicle } from 'models/vehicle';
+import { User } from 'models/user';
 
 export default class VehicleController {
   public static async getVehicles(ctx: BaseContext) {
@@ -38,8 +38,8 @@ export default class VehicleController {
     );
 
     const vehicle: Vehicle = await vehicleRepository
-      .createQueryBuilder("vehicle")
-      .leftJoin("vehicle.user", "user", "user.id = :id", {
+      .createQueryBuilder('vehicle')
+      .leftJoin('vehicle.user', 'user', 'user.id = :id', {
         id: ctx.params.id
       })
       .getOne();
@@ -54,7 +54,7 @@ export default class VehicleController {
   }
 
   public static async getVehicleByRegistration(ctx: BaseContext) {
-    console.log("by reg");
+    console.log('by reg');
 
     const vehicleRepository: Repository<Vehicle> = getManager().getRepository(
       Vehicle
@@ -76,17 +76,21 @@ export default class VehicleController {
   }
 
   public static async createVehicle(ctx: BaseContext) {
+    console.log(ctx.body);
     const vehicleRepository: Repository<Vehicle> = getManager().getRepository(
       Vehicle
     );
 
     const newVehicle: Vehicle = new Vehicle();
 
-    newVehicle.manufacturer = ctx.request.body.manufacturer;
-    newVehicle.model = ctx.request.body.model;
-    newVehicle.engineSize = ctx.request.body.engineSize;
-    newVehicle.registration = ctx.request.body.registration;
-    newVehicle.user = ctx.request.body.user;
+    const { manufacturer, model, engineSize, registration } = ctx.body;
+    const userId = ctx.body.user.id;
+
+    newVehicle.manufacturer = manufacturer;
+    newVehicle.model = model;
+    newVehicle.engineSize = engineSize;
+    newVehicle.registration = registration;
+    newVehicle.user = userId;
 
     const validationErrors: ValidationError[] = await validate(newVehicle, {
       skipMissingProperties: true
@@ -102,9 +106,14 @@ export default class VehicleController {
         newVehicle.registration
       } already exists`;
     } else {
-      const vehicle = vehicleRepository.save(newVehicle);
-      ctx.status = 201;
-      ctx.body = vehicle;
+      try {
+        const vehicle = vehicleRepository.save(newVehicle);
+        ctx.status = 201;
+        ctx.body = vehicle;
+      } catch (err) {
+        ctx.status = 500;
+        ctx.body = err;
+      }
     }
   }
 }
