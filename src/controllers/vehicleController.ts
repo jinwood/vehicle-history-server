@@ -76,15 +76,18 @@ export default class VehicleController {
   }
 
   public static async createVehicle(ctx: BaseContext) {
-    console.log(ctx.body);
     const vehicleRepository: Repository<Vehicle> = getManager().getRepository(
       Vehicle
     );
 
     const newVehicle: Vehicle = new Vehicle();
-
-    const { manufacturer, model, engineSize, registration } = ctx.body;
-    const userId = ctx.body.user.id;
+    const {
+      manufacturer,
+      model,
+      engineSize,
+      registration
+    } = ctx.request.body.vehicle;
+    const { userId } = ctx.request.body.user;
 
     newVehicle.manufacturer = manufacturer;
     newVehicle.model = model;
@@ -102,17 +105,20 @@ export default class VehicleController {
       await vehicleRepository.findOne({ registration: newVehicle.registration })
     ) {
       ctx.status = 400;
-      ctx.body = `the vehicle with registration ${
+      ctx.body = `a vehicle with registration ${
         newVehicle.registration
       } already exists`;
     } else {
       try {
-        const vehicle = vehicleRepository.save(newVehicle);
+        const vehicle = vehicleRepository.save(newVehicle).then(v => {
+          console.log(`created vehicle with id ${v.id}`);
+        });
+
         ctx.status = 201;
-        ctx.body = vehicle;
+        ctx.request.body = vehicle;
       } catch (err) {
         ctx.status = 500;
-        ctx.body = err;
+        ctx.response.body = err;
       }
     }
   }
