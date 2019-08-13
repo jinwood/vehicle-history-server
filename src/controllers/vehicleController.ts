@@ -75,6 +75,15 @@ export default class VehicleController {
     }
   }
 
+  public static async deleteAll(ctx: BaseContext) {
+    const vehicleRepository: Repository<Vehicle> = getManager().getRepository(
+      Vehicle
+    );
+
+    await vehicleRepository.delete({ registration: 'ABC123' });
+    await vehicleRepository.delete({ registration: 'XYZ321' });
+  }
+
   public static async createVehicle(ctx: BaseContext) {
     const vehicleRepository: Repository<Vehicle> = getManager().getRepository(
       Vehicle

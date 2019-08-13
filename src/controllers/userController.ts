@@ -1,8 +1,8 @@
-import { BaseContext } from "koa";
-import { getManager, Repository, Not, Equal, getConnection } from "typeorm";
-import { validate, ValidationError } from "class-validator";
-import { User } from "models/user";
-import { Vehicle } from "models/vehicle";
+import { BaseContext } from 'koa';
+import { getManager, Repository, Not, Equal, getConnection } from 'typeorm';
+import { validate, ValidationError } from 'class-validator';
+import { User } from 'models/user';
+import { Vehicle } from 'models/vehicle';
 
 export default class UserController {
   public static async getUsers(ctx: BaseContext) {
@@ -18,8 +18,8 @@ export default class UserController {
     const userRepository: Repository<User> = getManager().getRepository(User);
 
     const user: User = await userRepository
-      .createQueryBuilder("user")
-      .where("user.id = :id", { id: ctx.params.id })
+      .createQueryBuilder('user')
+      .where('user.id = :id', { id: ctx.params.id })
       .getOne();
 
     if (user) {
@@ -37,6 +37,7 @@ export default class UserController {
     const newUser: User = new User();
 
     newUser.givenName = ctx.request.body.name;
+    newUser.familyName = ctx.request.body.familyName;
     newUser.email = ctx.request.body.email;
     newUser.password = ctx.request.body.hashedPassword;
 
@@ -48,7 +49,7 @@ export default class UserController {
       ctx.body = validationErrors;
     } else if (await userRepository.findOne({ email: newUser.email })) {
       ctx.status = 400;
-      ctx.body = "the user with specified email already exists";
+      ctx.body = 'the user with specified email already exists';
     } else {
       const user = await userRepository.save(newUser);
       ctx.status = 201;
@@ -90,7 +91,7 @@ export default class UserController {
       })
     ) {
       ctx.status = 400;
-      ctx.body = "The specified e-mail address already exists";
+      ctx.body = 'The specified e-mail address already exists';
     } else {
       const user = await userRepository.save(updatee);
       ctx.status = 201;
@@ -112,15 +113,15 @@ export default class UserController {
     }
   }
   public static async getUserVehicles(ctx: BaseContext) {
-    console.log("in get user vehicles");
+    console.log('in get user vehicles');
     const userRepository: Repository<User> = getManager().getRepository(User);
 
     const user: User = await userRepository.findOne(ctx.params.id);
     let vehicle = await getConnection()
       .getRepository(User)
-      .createQueryBuilder("user")
-      .where("user.id = :id", { id: ctx.params.id })
-      .leftJoinAndSelect("user.vehicles", "vehicle.id")
+      .createQueryBuilder('user')
+      .where('user.id = :id', { id: ctx.params.id })
+      .leftJoinAndSelect('user.vehicles', 'vehicle.id')
       .getOne();
 
     if (user) {
