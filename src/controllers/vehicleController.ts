@@ -49,7 +49,9 @@ export default class VehicleController {
       ctx.body = vehicle;
     } else {
       ctx.status = 400;
-      ctx.body = `no vehicles associated with user ${ctx.params.id}`;
+      ctx.response.body = {
+        message: `no vehicles associated with user ${ctx.params.id}`
+      };
     }
   }
 
@@ -110,23 +112,27 @@ export default class VehicleController {
 
     if (validationErrors.length > 0) {
       ctx.status = 400;
-      ctx.body = validationErrors;
+      ctx.response.body = { validationErrors };
     } else if (
       await vehicleRepository.findOne({ registration: newVehicle.registration })
     ) {
       ctx.status = 400;
-      ctx.body = `a vehicle with registration ${registration} already exists`;
+      ctx.response.body = {
+        message: `a vehicle with registration ${registration} already exists`
+      };
     } else {
       try {
         const vehicle = vehicleRepository.save(newVehicle).then(v => {
           console.log(`created vehicle with id ${v.id}`);
         });
 
+        console.table(vehicle);
+
         ctx.status = 201;
-        ctx.request.body = vehicle;
+        ctx.response.body = { vehicle };
       } catch (err) {
         ctx.status = 500;
-        ctx.response.body = err;
+        ctx.response.body = { err };
       }
     }
   }
