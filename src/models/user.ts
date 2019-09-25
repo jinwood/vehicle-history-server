@@ -15,7 +15,9 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToMany(type => Vehicle, vehicle => vehicle.user)
+  @OneToMany(type => Vehicle, vehicle => vehicle.user, {
+    cascade: true
+  })
   vehicles: Vehicle[];
 
   @Column('text')

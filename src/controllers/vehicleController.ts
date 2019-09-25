@@ -49,7 +49,9 @@ export default class VehicleController {
       ctx.body = vehicle;
     } else {
       ctx.status = 400;
-      ctx.body = `no vehicles associated with user ${ctx.params.id}`;
+      ctx.response.body = {
+        message: `no vehicles associated with user ${ctx.params.id}`
+      };
     }
   }
 
@@ -75,16 +77,28 @@ export default class VehicleController {
     }
   }
 
+  public static async deleteAll(ctx: BaseContext) {
+    const vehicleRepository: Repository<Vehicle> = getManager().getRepository(
+      Vehicle
+    );
+
+    await vehicleRepository.delete({ registration: 'ABC123' });
+    await vehicleRepository.delete({ registration: 'XYZ321' });
+  }
+
   public static async createVehicle(ctx: BaseContext) {
-    console.log(ctx.body);
     const vehicleRepository: Repository<Vehicle> = getManager().getRepository(
       Vehicle
     );
 
     const newVehicle: Vehicle = new Vehicle();
-
-    const { manufacturer, model, engineSize, registration } = ctx.body;
-    const userId = ctx.body.user.id;
+    const {
+      manufacturer,
+      model,
+      engineSize,
+      registration
+    } = ctx.request.body.vehicle;
+    const { userId } = ctx.request.body.user;
 
     newVehicle.manufacturer = manufacturer;
     newVehicle.model = model;
@@ -95,22 +109,30 @@ export default class VehicleController {
     const validationErrors: ValidationError[] = await validate(newVehicle, {
       skipMissingProperties: true
     });
+
     if (validationErrors.length > 0) {
       ctx.status = 400;
-      ctx.body = validationErrors;
+      ctx.response.body = { validationErrors };
     } else if (
       await vehicleRepository.findOne({ registration: newVehicle.registration })
     ) {
       ctx.status = 400;
-      ctx.body = `the vehicle with registration ${newVehicle.registration} already exists`;
+      ctx.response.body = {
+        message: `a vehicle with registration ${registration} already exists`
+      };
     } else {
       try {
-        const vehicle = vehicleRepository.save(newVehicle);
+        const vehicle = vehicleRepository.save(newVehicle).then(v => {
+          console.log(`created vehicle with id ${v.id}`);
+        });
+
+        console.table(vehicle);
+
         ctx.status = 201;
-        ctx.body = vehicle;
+        ctx.response.body = { vehicle };
       } catch (err) {
         ctx.status = 500;
-        ctx.body = err;
+        ctx.response.body = { err };
       }
     }
   }

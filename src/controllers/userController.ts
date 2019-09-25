@@ -37,6 +37,7 @@ export default class UserController {
     const newUser: User = new User();
 
     newUser.givenName = ctx.request.body.name;
+    newUser.familyName = ctx.request.body.familyName;
     newUser.email = ctx.request.body.email;
     newUser.password = ctx.request.body.hashedPassword;
 

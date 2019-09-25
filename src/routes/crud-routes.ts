@@ -24,5 +24,8 @@ crudRouter.get(
   vehicleController.getVehicleByRegistration
 );
 
+//dev
+crudRouter.delete('/vehicles', vehicleController.deleteAll);
+
 //history items
 crudRouter.get('/historyitems', HistoryItemController.getHistoryItems);
