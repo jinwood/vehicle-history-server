@@ -5,9 +5,11 @@
   "main": "app.js",
   "scripts": {
     "build": "tsc",
+    "start": "node dist/src/server.js",
     "serve": "ts-node src/server.ts",
     "dev": "nodemon",
-    "restart": "kill-port 4000"
+    "restart": "kill-port 4000",
+    "test": "echo 'there aint no tests'"
   },
   "keywords": [],
   "author": "",
