@@ -1,8 +1,8 @@
 import { BaseContext } from 'koa';
 import { getManager, Repository, getConnection } from 'typeorm';
 import { validate, ValidationError } from 'class-validator';
-import { Vehicle } from 'models/vehicle';
-import { User } from 'models/user';
+import { Vehicle } from '../models/vehicle';
+import { User } from '../models/user';
 
 export default class VehicleController {
   public static async getVehicles(ctx: BaseContext) {
@@ -21,7 +21,7 @@ export default class VehicleController {
       Vehicle
     );
 
-    const vehicle: Vehicle = await vehicleRepository.findOne(ctx.params.id);
+    const vehicle = await vehicleRepository.findOne(ctx.params.id);
 
     if (vehicle) {
       ctx.status = 200;
@@ -37,7 +37,7 @@ export default class VehicleController {
       Vehicle
     );
 
-    const vehicle: Vehicle = await vehicleRepository
+    const vehicle = await vehicleRepository
       .createQueryBuilder('vehicle')
       .leftJoin('vehicle.user', 'user', 'user.id = :id', {
         id: ctx.params.id
@@ -60,7 +60,7 @@ export default class VehicleController {
       Vehicle
     );
 
-    const vehicle: Vehicle = await vehicleRepository.findOne({
+    const vehicle = await vehicleRepository.findOne({
       where: {
         registration: ctx.params.registration
       }
@@ -102,9 +102,7 @@ export default class VehicleController {
       await vehicleRepository.findOne({ registration: newVehicle.registration })
     ) {
       ctx.status = 400;
-      ctx.body = `the vehicle with registration ${
-        newVehicle.registration
-      } already exists`;
+      ctx.body = `the vehicle with registration ${newVehicle.registration} already exists`;
     } else {
       try {
         const vehicle = vehicleRepository.save(newVehicle);

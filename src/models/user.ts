@@ -1,42 +1,40 @@
 import {
-    Entity,
-    PrimaryGeneratedColumn, 
-    Column,
-    CreateDateColumn,
-    UpdateDateColumn,
-    OneToMany,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany
 } from 'typeorm';
 
 import { Length, IsEmail } from 'class-validator';
 import { Vehicle } from './vehicle';
 
 @Entity('users')
-
 export class User {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+  @OneToMany(type => Vehicle, vehicle => vehicle.user)
+  vehicles: Vehicle[];
 
-    @OneToMany(type => Vehicle, vehicle => vehicle.user)
-    vehicles: Vehicle[]
+  @Column('text')
+  givenName: string;
 
-    @Column('text')
-    givenName: string;
+  @Column('text')
+  familyName: string;
 
-    @Column('text')
-    familyName: string
+  @Column('text')
+  @Length(5, 100)
+  @IsEmail()
+  email: string;
 
-    @Column('text')
-    @Length(5, 100)
-    @IsEmail()
-    email: string;
+  @Column('text')
+  password: string;
 
-    @Column('text')
-    password: string;
+  @CreateDateColumn()
+  createdAt: Date;
 
-    @CreateDateColumn()
-    createdAt: Date;
-
-    @UpdateDateColumn()
-    updatedAt: Date;
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

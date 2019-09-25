@@ -1,22 +1,21 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from "typeorm";
-import { Vehicle } from "./vehicle";
-import { HistoryItemType } from 'enums/historyItemType';
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
+import { Vehicle } from './vehicle';
+import { HistoryItemType } from '../enums/historyItemType';
 
 @Entity('historyItems')
 export class HistoryItem {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @PrimaryGeneratedColumn('uuid')
-    id: string
+  @ManyToOne(type => Vehicle, vehicle => vehicle.historyItems)
+  vehicle: Vehicle;
 
-    @ManyToOne(type => Vehicle, vehicle => vehicle.historyItems)
-    vehicle: Vehicle
+  @Column('int')
+  type: HistoryItemType;
 
-    @Column('int')
-    type: HistoryItemType
+  @Column('text')
+  description: string;
 
-    @Column('text')
-    description: string
-
-    @Column('text')
-    media: [string]
+  @Column('text')
+  media: [string];
 }
