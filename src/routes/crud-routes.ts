@@ -2,8 +2,12 @@ import Router from 'koa-router';
 import userController from '../controllers/userController';
 import vehicleController from '../controllers/vehicleController';
 import HistoryItemController from '../controllers/historyItemController';
+import homeController from '../controllers/homeController';
 
 export const crudRouter: Router = new Router();
+
+//home
+crudRouter.get('/', homeController.home);
 
 //user
 crudRouter.get('/users', userController.getUsers);
