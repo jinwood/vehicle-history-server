@@ -26,6 +26,6 @@ jobs:
       with: 
         app-name: vehicle-history-api
         publish-profile: ${{ secrets.azureWebAppPublishProfile }} # Define secret variable in repository settings as per action documentation
-        package: './dist/src'
+        package: '.'
         # If your function app project is not located in your repository's root
         # Please consider prefixing the project path in this package parameter
