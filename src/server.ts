@@ -22,7 +22,7 @@ const bootstrap = async () => {
 
   app.use(crudRouter.routes(), crudRouter.allowedMethods());
 
-  app.listen(4000);
+  app.listen(3000);
 };
 
 bootstrap();
