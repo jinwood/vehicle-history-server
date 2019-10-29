@@ -1,8 +1,8 @@
 import { BaseContext } from 'koa';
 import { getManager, Repository, getConnection } from 'typeorm';
 import { validate, ValidationError } from 'class-validator';
-import { Vehicle } from '../models/vehicle';
-import { User } from '../models/user';
+import { Vehicle } from '../entities/vehicle';
+import { User } from '../entities/user';
 
 export default class VehicleController {
   public static async getVehicles(ctx: BaseContext) {

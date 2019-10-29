@@ -1,8 +1,8 @@
 import { BaseContext } from 'koa';
 import { getConnection } from 'typeorm';
-import { User } from '../models/user';
-import { Vehicle } from '../models/vehicle';
-import { HistoryItem } from '../models/historyItem';
+import { User } from '../entities/user';
+import { Vehicle } from '../entities/vehicle';
+import { HistoryItem } from '../entities/historyItem';
 
 export class TestData {
   public static async createTestData(ctx: BaseContext) {

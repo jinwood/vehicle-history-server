@@ -1,29 +1,26 @@
-import bodyParser from 'koa-bodyparser';
-import * as cors from 'koa2-cors';
-import { testRouter } from './routes/test-routes';
-import { crudRouter } from './routes/crud-routes';
+import 'reflect-metadata';
 import postgresDB from './database/postgres-db';
-
-var app = require('./app');
-const options = {
-  origin: true,
-  credentials: true
-};
+import { ApolloServer } from 'apollo-server';
+import { UserResolver } from './resolvers/userResolver';
+import { Container } from 'typedi';
+import { buildSchema } from 'type-graphql';
+import { Context } from './resolvers/types/context';
 
 const bootstrap = async () => {
-  //init db
-  await postgresDB();
+  try {
+    //init db
+    await postgresDB();
 
-  app.use(cors.default({ origin: 'http://localhost:3000' }));
+    const schema = await buildSchema({
+      resolvers: [UserResolver]
+    });
 
-  app.use(bodyParser());
-
-  app.use(testRouter.routes(), testRouter.allowedMethods());
-
-  app.use(crudRouter.routes(), crudRouter.allowedMethods());
-
-  const port = process.env.PORT || 4000;
-  app.listen(port);
+    const server = new ApolloServer({ schema });
+    const { url } = await server.listen(4000);
+    console.log(`Server is running, GraphQL Playground available at ${url}`);
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 bootstrap();

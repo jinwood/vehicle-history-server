@@ -1,6 +1,6 @@
 import { createConnection, Repository, getManager, Connection } from 'typeorm';
 import { postgresTables } from './postgres-tables';
-import { Manufacturers } from '../models/manufacturers';
+import { Manufacturers } from '../entities/manufacturers';
 import manufacturersData from '../../config.json';
 
 const postgresDB = async () => {
