@@ -24,8 +24,8 @@ export class UserResolver {
   //   console.log('ello', this.userRepository);
   //   return this.userRepository.find();
   // }
-  @Query()
-  users() {
+  @Query(returns => [User])
+  users()  {
     const users = this.userRepository.find();
     return users;
   }
