@@ -1,18 +1,21 @@
 import 'reflect-metadata';
+import * as TypeORM from 'typeorm';
+import * as TypeGraphQL from 'type-graphql';
 import postgresDB from './database/postgres-db';
 import { ApolloServer } from 'apollo-server';
 import { UserResolver } from './resolvers/userResolver';
 import { Container } from 'typedi';
-import { buildSchema } from 'type-graphql';
-import { Context } from './resolvers/types/context';
+
+TypeORM.useContainer(Container);
 
 const bootstrap = async () => {
   try {
     //init db
     await postgresDB();
 
-    const schema = await buildSchema({
-      resolvers: [UserResolver]
+    const schema = await TypeGraphQL.buildSchema({
+      resolvers: [UserResolver],
+      container: Container,
     });
 
     const server = new ApolloServer({ schema });

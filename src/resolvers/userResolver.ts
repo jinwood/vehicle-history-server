@@ -1,4 +1,5 @@
 //https://typegraphql.ml/docs/resolvers.html
+//https://gitter.im/type-graphql/Lobby#
 import {
   Resolver,
   Query,
@@ -6,13 +7,13 @@ import {
   ResolverInterface,
   FieldResolver
 } from 'type-graphql';
+import { InjectRepository } from 'typeorm-typedi-extensions';
 import { Repository } from 'typeorm';
-import UserGraph from './types/userGraph';
 import { User } from '../entities/user';
 
-@Resolver(of => UserGraph)
+@Resolver(of => User)
 export class UserResolver {
-  constructor(private userRepository: Repository<User>) {}
+  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>){}
 
   // @Query(returns => UserGraph)
   // user(@Arg('userId') userId: string) {

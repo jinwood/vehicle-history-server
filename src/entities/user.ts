@@ -9,9 +9,12 @@ import {
 
 import { Length, IsEmail } from 'class-validator';
 import { Vehicle } from './vehicle';
+import { ObjectType, Field, ID } from 'type-graphql';
 
+@ObjectType()
 @Entity('users')
 export class User {
+  @Field(type => ID)
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -20,12 +23,15 @@ export class User {
   })
   vehicles: Vehicle[];
 
+  @Field(type => String)
   @Column('text')
   givenName: string;
 
+  @Field(type => String)
   @Column('text')
   familyName: string;
 
+  @Field(type => String)
   @Column('text')
   @Length(5, 100)
   @IsEmail()
