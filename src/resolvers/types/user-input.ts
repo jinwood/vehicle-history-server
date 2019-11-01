@@ -8,4 +8,10 @@ export class UserInput implements Partial<User> {
 
   @Field()
   familyName: string;
+
+  @Field()
+  email: string;
+
+  @Field()
+  password: string;
 }
