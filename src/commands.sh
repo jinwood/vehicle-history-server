@@ -1,3 +1,11 @@
 #Create user
-
-http POST http://localhost:4000/users name="Julian" familyName="Inwood" email="foo@bar.com" hashedPassword="password"
+mutation{
+  addUser(user:{  givenName: "Test",
+  familyName: "Tester",
+  email: "test.tester@test.com"
+  password:"password"}){
+  	email,
+    id
+  }
+}
+#Delete user

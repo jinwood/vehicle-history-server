@@ -18,6 +18,7 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Field(type => [Vehicle], {nullable:true})
   @OneToMany(type => Vehicle, vehicle => vehicle.user, {
     cascade: true
   })

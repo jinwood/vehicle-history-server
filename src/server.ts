@@ -5,6 +5,7 @@ import postgresDB from './database/postgres-db';
 import { ApolloServer } from 'apollo-server';
 import { UserResolver } from './resolvers/userResolver';
 import { Container } from 'typedi';
+import { VehicleResolver } from './resolvers/vehicleResolver';
 
 TypeORM.useContainer(Container);
 
@@ -14,7 +15,7 @@ const bootstrap = async () => {
     await postgresDB();
 
     const schema = await TypeGraphQL.buildSchema({
-      resolvers: [UserResolver],
+      resolvers: [UserResolver, VehicleResolver],
       container: Container,
     });
 
