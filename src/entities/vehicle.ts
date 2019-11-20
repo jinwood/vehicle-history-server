@@ -15,20 +15,26 @@ import { RelationalColumn } from '../columns';
 export class Vehicle {
   @Field(type => ID)
   @PrimaryGeneratedColumn('uuid')
-  readonly id: string;
+  id: string;
 
   @Field(type => User)
-  @ManyToOne(type => User, user => user.vehicles, {
-    onDelete: 'CASCADE'
-  })
-
+  @ManyToOne(
+    type => User,
+    user => user.vehicles,
+    {
+      onDelete: 'CASCADE'
+    }
+  )
   @Field(type => User)
   user: User;
 
   @RelationalColumn()
   userId: string;
 
-  @OneToMany(type => HistoryItem, historyItem => historyItem.vehicle)
+  @OneToMany(
+    type => HistoryItem,
+    historyItem => historyItem.vehicle
+  )
   historyItems: HistoryItem[];
 
   @Field(type => String)
