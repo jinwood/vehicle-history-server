@@ -1,11 +1,11 @@
-import { BaseContext } from 'koa';
-import { getManager, Repository, getConnection } from 'typeorm';
-import { validate, ValidationError } from 'class-validator';
-import { Vehicle } from '../models/vehicle';
-import { User } from '../models/user';
+import { Context } from "koa";
+import { getManager, Repository, getConnection } from "typeorm";
+import { validate, ValidationError } from "class-validator";
+import { Vehicle } from "../models/vehicle";
+import { User } from "../models/user";
 
 export default class VehicleController {
-  public static async getVehicles(ctx: BaseContext) {
+  public static async getVehicles(ctx: Context) {
     const vehicleRepository: Repository<Vehicle> = getManager().getRepository(
       Vehicle
     );
@@ -16,7 +16,7 @@ export default class VehicleController {
     ctx.body = vehicles;
   }
 
-  public static async getVehicle(ctx: BaseContext) {
+  public static async getVehicle(ctx: Context) {
     const vehicleRepository: Repository<Vehicle> = getManager().getRepository(
       Vehicle
     );
@@ -32,15 +32,15 @@ export default class VehicleController {
     }
   }
 
-  public static async getVehicleByUserId(ctx: BaseContext) {
+  public static async getVehicleByUserId(ctx: Context) {
     const vehicleRepository: Repository<Vehicle> = getManager().getRepository(
       Vehicle
     );
 
     const vehicle = await vehicleRepository
-      .createQueryBuilder('vehicle')
-      .leftJoin('vehicle.user', 'user', 'user.id = :id', {
-        id: ctx.params.id
+      .createQueryBuilder("vehicle")
+      .leftJoin("vehicle.user", "user", "user.id = :id", {
+        id: ctx.params.id,
       })
       .getOne();
 
@@ -50,13 +50,13 @@ export default class VehicleController {
     } else {
       ctx.status = 400;
       ctx.response.body = {
-        message: `no vehicles associated with user ${ctx.params.id}`
+        message: `no vehicles associated with user ${ctx.params.id}`,
       };
     }
   }
 
-  public static async getVehicleByRegistration(ctx: BaseContext) {
-    console.log('by reg');
+  public static async getVehicleByRegistration(ctx: Context) {
+    console.log("by reg");
 
     const vehicleRepository: Repository<Vehicle> = getManager().getRepository(
       Vehicle
@@ -64,8 +64,8 @@ export default class VehicleController {
 
     const vehicle = await vehicleRepository.findOne({
       where: {
-        registration: ctx.params.registration
-      }
+        registration: ctx.params.registration,
+      },
     });
 
     if (vehicle) {
@@ -77,16 +77,16 @@ export default class VehicleController {
     }
   }
 
-  public static async deleteAll(ctx: BaseContext) {
+  public static async deleteAll(ctx: Context) {
     const vehicleRepository: Repository<Vehicle> = getManager().getRepository(
       Vehicle
     );
 
-    await vehicleRepository.delete({ registration: 'ABC123' });
-    await vehicleRepository.delete({ registration: 'XYZ321' });
+    await vehicleRepository.delete({ registration: "ABC123" });
+    await vehicleRepository.delete({ registration: "XYZ321" });
   }
 
-  public static async createVehicle(ctx: BaseContext) {
+  public static async createVehicle(ctx: Context) {
     const vehicleRepository: Repository<Vehicle> = getManager().getRepository(
       Vehicle
     );
@@ -96,7 +96,7 @@ export default class VehicleController {
       manufacturer,
       model,
       engineSize,
-      registration
+      registration,
     } = ctx.request.body.vehicle;
     const { userId } = ctx.request.body.user;
 
@@ -107,7 +107,7 @@ export default class VehicleController {
     newVehicle.user = userId;
 
     const validationErrors: ValidationError[] = await validate(newVehicle, {
-      skipMissingProperties: true
+      skipMissingProperties: true,
     });
 
     if (validationErrors.length > 0) {
@@ -118,11 +118,11 @@ export default class VehicleController {
     ) {
       ctx.status = 400;
       ctx.response.body = {
-        message: `a vehicle with registration ${registration} already exists`
+        message: `a vehicle with registration ${registration} already exists`,
       };
     } else {
       try {
-        const vehicle = vehicleRepository.save(newVehicle).then(v => {
+        const vehicle = vehicleRepository.save(newVehicle).then((v) => {
           console.log(`created vehicle with id ${v.id}`);
         });
 
