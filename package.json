@@ -16,7 +16,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/koa-router": "^7.0.42",
-    "nodemon": "^1.19.1",
+    "nodemon": "^2.0.4",
     "typescript": "^3.5.3"
   },
   "dependencies": {
