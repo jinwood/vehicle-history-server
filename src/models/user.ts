@@ -4,34 +4,34 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany
-} from 'typeorm';
+  OneToMany,
+} from "typeorm";
 
-import { Length, IsEmail } from 'class-validator';
-import { Vehicle } from './vehicle';
+import { Length, IsEmail } from "class-validator";
+import { Vehicle } from "./vehicle";
 
-@Entity('users')
+@Entity("users")
 export class User {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @OneToMany(type => Vehicle, vehicle => vehicle.user, {
-    cascade: true
+  @OneToMany((type) => Vehicle, (vehicle) => vehicle.user, {
+    cascade: true,
   })
   vehicles: Vehicle[];
 
-  @Column('text')
+  @Column("text")
   givenName: string;
 
-  @Column('text')
+  @Column("text")
   familyName: string;
 
-  @Column('text')
+  @Column("text")
   @Length(5, 100)
   @IsEmail()
   email: string;
 
-  @Column('text')
+  @Column("text")
   password: string;
 
   @CreateDateColumn()
