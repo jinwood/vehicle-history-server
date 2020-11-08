@@ -96,6 +96,7 @@ export default class VehicleController {
     });
 
     if (vehicle) {
+      vehicleRepository.delete(vehicle.id);
       ctx.status = 200;
     } else {
       ctx.status = 400;
