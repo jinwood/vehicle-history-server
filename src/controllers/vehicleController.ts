@@ -49,7 +49,7 @@ export default class VehicleController {
       ctx.status = 200;
       ctx.body = vehicle;
     } else {
-      ctx.status = 400;
+      ctx.status = 404;
       ctx.response.body = {
         message: `no vehicles associated with user ${ctx.params.id}`,
       };
