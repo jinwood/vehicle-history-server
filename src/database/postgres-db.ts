@@ -2,8 +2,7 @@ import { createConnection } from "typeorm";
 import { postgresTables } from "./postgres-tables";
 
 const postgresDB = async () => {
-  console.log("connecting...");
-  const connection = await createConnection({
+  return await createConnection({
     type: "postgres",
     host: "manny.db.elephantsql.com",
     port: 5432,
@@ -19,8 +18,6 @@ const postgresDB = async () => {
       console.log("connection to db established");
     })
     .catch((error) => console.log(`here's an error ${error}`));
-  console.log("connection", connection);
-  return connection;
 };
 
 export default postgresDB;
