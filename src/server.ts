@@ -1,20 +1,21 @@
-import bodyParser from 'koa-bodyparser';
-import * as cors from 'koa2-cors';
-import { testRouter } from './routes/test-routes';
-import { crudRouter } from './routes/crud-routes';
-import postgresDB from './database/postgres-db';
+import bodyParser from "koa-bodyparser";
+import * as cors from "koa2-cors";
+import { testRouter } from "./routes/test-routes";
+import { crudRouter } from "./routes/crud-routes";
+import postgresDB from "./database/postgres-db";
 
-var app = require('./app');
+var app = require("./app");
 const options = {
   origin: true,
-  credentials: true
+  credentials: true,
 };
 
 const bootstrap = async () => {
   //init db
   await postgresDB();
+  console.log("outside connection");
 
-  app.use(cors.default({ origin: 'http://localhost:3000' }));
+  app.use(cors.default({ origin: "http://localhost:3000" }));
 
   app.use(bodyParser());
 

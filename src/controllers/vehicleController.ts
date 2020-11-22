@@ -1,12 +1,10 @@
-import { BaseContext } from "koa";
+import { Context } from "koa";
 import { getManager, Repository, getConnection } from "typeorm";
 import { validate, ValidationError } from "class-validator";
 import { Vehicle } from "../models/vehicle";
-import { User } from "../models/user";
-import { version } from "typescript";
 
 export default class VehicleController {
-  public static async getVehicles(ctx: BaseContext) {
+  public static async getVehicles(ctx: Context) {
     const vehicleRepository: Repository<Vehicle> = getManager().getRepository(
       Vehicle
     );
@@ -17,7 +15,7 @@ export default class VehicleController {
     ctx.body = vehicles;
   }
 
-  public static async getVehicle(ctx: BaseContext) {
+  public static async getVehicle(ctx: Context) {
     const vehicleRepository: Repository<Vehicle> = getManager().getRepository(
       Vehicle
     );
@@ -33,7 +31,7 @@ export default class VehicleController {
     }
   }
 
-  public static async getVehicleByUserId(ctx: BaseContext) {
+  public static async getVehicleByUserId(ctx: Context) {
     const vehicleRepository: Repository<Vehicle> = getManager().getRepository(
       Vehicle
     );
@@ -54,7 +52,7 @@ export default class VehicleController {
     }
   }
 
-  public static async getVehicleByRegistration(ctx: BaseContext) {
+  public static async getVehicleByRegistration(ctx: Context) {
     console.log("by reg");
 
     const vehicleRepository: Repository<Vehicle> = getManager().getRepository(
@@ -76,7 +74,7 @@ export default class VehicleController {
     }
   }
 
-  public static async deleteAll(ctx: BaseContext) {
+  public static async deleteAll(ctx: Context) {
     const vehicleRepository: Repository<Vehicle> = getManager().getRepository(
       Vehicle
     );
@@ -85,7 +83,7 @@ export default class VehicleController {
     await vehicleRepository.delete({ registration: "XYZ321" });
   }
 
-  public static async deleteById(ctx: BaseContext) {
+  public static async deleteById(ctx: Context) {
     const vehicleRepository: Repository<Vehicle> = getManager().getRepository(
       Vehicle
     );
@@ -102,7 +100,7 @@ export default class VehicleController {
     }
   }
 
-  public static async createVehicle(ctx: BaseContext) {
+  public static async createVehicle(ctx: Context) {
     const vehicleRepository: Repository<Vehicle> = getManager().getRepository(
       Vehicle
     );

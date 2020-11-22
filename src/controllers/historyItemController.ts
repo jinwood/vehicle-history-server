@@ -1,13 +1,13 @@
-import { BaseContext } from 'koa';
-import { Repository, getManager } from 'typeorm';
-import { HistoryItem } from '../models/historyItem';
-import { ValidationError, validate } from 'class-validator';
+import { Context } from "koa";
+import { Repository, getManager } from "typeorm";
+import { HistoryItem } from "../models/historyItem";
+import { ValidationError, validate } from "class-validator";
 
 export default class HistoryItemController {
-  public static async getHistoryItems(ctx: BaseContext) {
-    const historyItemRepository: Repository<
+  public static async getHistoryItems(ctx: Context) {
+    const historyItemRepository: Repository<HistoryItem> = getManager().getRepository(
       HistoryItem
-    > = getManager().getRepository(HistoryItem);
+    );
 
     const historyItems: HistoryItem[] = await historyItemRepository.find();
 
@@ -15,10 +15,10 @@ export default class HistoryItemController {
     ctx.body = historyItems;
   }
 
-  public static async createHistoryItem(ctx: BaseContext) {
-    const historyItemRepository: Repository<
+  public static async createHistoryItem(ctx: Context) {
+    const historyItemRepository: Repository<HistoryItem> = getManager().getRepository(
       HistoryItem
-    > = getManager().getRepository(HistoryItem);
+    );
 
     const newHistoryItem: HistoryItem = new HistoryItem();
     const { historyItemType, description } = ctx.request.body.historyItem;
@@ -27,7 +27,7 @@ export default class HistoryItemController {
     newHistoryItem.description = description;
 
     const validationErrors: ValidationError[] = await validate(newHistoryItem, {
-      skipMissingProperties: true
+      skipMissingProperties: true,
     });
 
     if (validationErrors.length > 0) {
@@ -37,7 +37,7 @@ export default class HistoryItemController {
       try {
         const historyItem = historyItemRepository
           .save(newHistoryItem)
-          .then(h => {
+          .then((h) => {
             console.log(`created vehicle with id ${h.id}`);
           });
         ctx.status = 201;

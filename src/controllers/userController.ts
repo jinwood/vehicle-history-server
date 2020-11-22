@@ -1,11 +1,10 @@
-import { BaseContext } from 'koa';
-import { getManager, Repository, Not, Equal, getConnection } from 'typeorm';
-import { validate, ValidationError } from 'class-validator';
-import { User } from '../models/user';
-import { Vehicle } from '../models/vehicle';
+import { Context } from "koa";
+import { getManager, Repository, Not, Equal, getConnection } from "typeorm";
+import { validate, ValidationError } from "class-validator";
+import { User } from "../models/user";
 
 export default class UserController {
-  public static async getUsers(ctx: BaseContext) {
+  public static async getUsers(ctx: Context) {
     const userRepository: Repository<User> = getManager().getRepository(User);
 
     const users: User[] = await userRepository.find();
@@ -14,12 +13,12 @@ export default class UserController {
     ctx.body = users;
   }
 
-  public static async getUser(ctx: BaseContext) {
+  public static async getUser(ctx: Context) {
     const userRepository: Repository<User> = getManager().getRepository(User);
 
     const user = await userRepository
-      .createQueryBuilder('user')
-      .where('user.id = :id', { id: ctx.params.id })
+      .createQueryBuilder("user")
+      .where("user.id = :id", { id: ctx.params.id })
       .getOne();
 
     if (user) {
@@ -31,7 +30,7 @@ export default class UserController {
     }
   }
 
-  public static async createUser(ctx: BaseContext) {
+  public static async createUser(ctx: Context) {
     const userRepository: Repository<User> = getManager().getRepository(User);
 
     const newUser: User = new User();
@@ -42,14 +41,14 @@ export default class UserController {
     newUser.password = ctx.request.body.hashedPassword;
 
     const validationErrors: ValidationError[] = await validate(newUser, {
-      skipMissingProperties: true
+      skipMissingProperties: true,
     });
     if (validationErrors.length > 0) {
       ctx.status = 400;
       ctx.body = validationErrors;
     } else if (await userRepository.findOne({ email: newUser.email })) {
       ctx.status = 400;
-      ctx.body = 'the user with specified email already exists';
+      ctx.body = "the user with specified email already exists";
     } else {
       const user = await userRepository.save(newUser);
       ctx.status = 201;
@@ -57,7 +56,7 @@ export default class UserController {
     }
   }
 
-  public static async updateUser(ctx: BaseContext) {
+  public static async updateUser(ctx: Context) {
     const userRepository: Repository<User> = getManager().getRepository(User);
 
     const updatee = await userRepository.findOne(ctx.params.id);
@@ -88,11 +87,11 @@ export default class UserController {
     } else if (
       await userRepository.findOne({
         id: Not(Equal(updatee.id)),
-        email: updatee.email
+        email: updatee.email,
       })
     ) {
       ctx.status = 400;
-      ctx.body = 'The specified e-mail address already exists';
+      ctx.body = "The specified e-mail address already exists";
     } else {
       const user = await userRepository.save(updatee);
       ctx.status = 201;
@@ -100,7 +99,7 @@ export default class UserController {
     }
   }
 
-  public static async deleteUser(ctx: BaseContext) {
+  public static async deleteUser(ctx: Context) {
     const userRepository: Repository<User> = getManager().getRepository(User);
 
     const deletee = await userRepository.findOne(ctx.params.id);
@@ -113,16 +112,16 @@ export default class UserController {
       ctx.status = 204;
     }
   }
-  public static async getUserVehicles(ctx: BaseContext) {
-    console.log('in get user vehicles');
+  public static async getUserVehicles(ctx: Context) {
+    console.log("in get user vehicles");
     const userRepository: Repository<User> = getManager().getRepository(User);
 
     const user = await userRepository.findOne(ctx.params.id);
     let vehicle = await getConnection()
       .getRepository(User)
-      .createQueryBuilder('user')
-      .where('user.id = :id', { id: ctx.params.id })
-      .leftJoinAndSelect('user.vehicles', 'vehicle.id')
+      .createQueryBuilder("user")
+      .where("user.id = :id", { id: ctx.params.id })
+      .leftJoinAndSelect("user.vehicles", "vehicle.id")
       .getOne();
 
     if (user) {
